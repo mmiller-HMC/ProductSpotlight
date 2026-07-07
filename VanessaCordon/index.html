@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Homespire Mortgage - More Loan Possibilities, More Ways Home">
@@ -12,7 +10,981 @@
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/style.css">
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg-primary: #fafafa;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8f7fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #888;
+            --accent: #6B4E9B;
+            --accent-light: #8B6BBB;
+            --accent-gradient: linear-gradient(135deg, #6B4E9B 0%, #8B6BBB 100%);
+            --border: #e8e8e8;
+            --serif: 'DM Serif Display', Georgia, serif;
+            --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* CSS Reset with better cross-browser support */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            /* Improve Android scroll performance */
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: none;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--sans);
+            line-height: 1.6;
+            font-size: 17px;
+            min-height: 100vh;
+        }
+
+        .logo {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 100;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--border);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #e040fb 0%, #7c4dff 100%);
+            width: 50%;
+            transition: width 0.1s ease-out;
+        }
+
+        .nav {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .nav button:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px rgba(107, 78, 155, 0.12);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            z-index: 100;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            padding: 120px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gradient glow background */
+        .gradient-glow {
+            position: absolute;
+            bottom: -300px;
+            left: -300px;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, rgba(224, 64, 251, 0.15) 0%, rgba(124, 77, 255, 0.08) 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .gradient-glow-secondary {
+            position: absolute;
+            bottom: -150px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(124, 77, 255, 0.12) 0%, rgba(224, 64, 251, 0.05) 50%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            max-width: 1400px;
+            width: 100%;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-content.reverse {
+            direction: rtl;
+        }
+
+        .slide-content.reverse > * {
+            direction: ltr;
+        }
+
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(107, 78, 155, 0.15);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+            display: block;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+
+        .image-container img.floating {
+            border-radius: 0;
+            box-shadow: none;
+            height: auto;
+            max-height: none;
+            max-width: 150%;
+            width: auto;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        .image-container img.floating-smaller {
+            border-radius: 0;
+            box-shadow: none;
+            height: auto;
+            max-height: none;
+            max-width: 80%;
+            width: auto;
+        }
+
+        .image-container img.floating:hover,
+        .image-container img.floating-smaller:hover {
+            transform: scale(1.05);
+            box-shadow: none;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 48px rgba(107, 78, 155, 0.25);
+        }
+
+        .content-container {
+            max-width: 600px;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: linear-gradient(135deg, rgba(107, 78, 155, 0.08), rgba(139, 107, 187, 0.08));
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-size: 56px;
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .feature-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .feature-block:hover {
+            border-color: var(--accent-light);
+            box-shadow: 0 4px 16px rgba(107, 78, 155, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .new-badge {
+            position: absolute;
+            top: -10px;
+            right: 16px;
+            background: linear-gradient(135deg, #e040fb 0%, #7c4dff 100%);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 4px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(107, 78, 155, 0.3);
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #e040fb 0%, #7c4dff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .feature-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .slide-content {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .slide-content.reverse {
+                direction: ltr;
+            }
+
+            h1 {
+                font-size: 42px;
+            }
+
+            .slide {
+                padding: 80px 32px;
+            }
+        }
+
+        /* Shimmer effect for emphasized text */
+        @keyframes shimmer {
+            0% {
+                background-position: 200% center;
+            }
+            100% {
+                background-position: -200% center;
+            }
+        }
+
+        .shimmer-text {
+            background: linear-gradient(
+                90deg,
+                #e040fb 0%,
+                #7c4dff 25%,
+                #ffffff 50%,
+                #7c4dff 75%,
+                #e040fb 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* ============================================
+           RESPONSIVE MEDIA QUERIES
+           ============================================ */
+
+        /* Tablet - Portrait (768px - 1024px) */
+        @media screen and (max-width: 1024px) {
+            .slide-content {
+                padding: 40px 40px !important;
+                gap: 40px !important;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 5vw, 3rem) !important;
+            }
+
+            .subtitle {
+                font-size: 16px !important;
+            }
+
+            .logo {
+                width: 40px;
+                height: 40px;
+                top: 16px;
+                left: 16px;
+            }
+
+            .nav {
+                top: 16px;
+                right: 16px;
+            }
+
+            .nav button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+
+        /* Mobile - Landscape & Small Tablets (481px - 767px) */
+        @media screen and (max-width: 767px) {
+            /* Android scroll fix - prevent scroll jumping */
+            html {
+                scroll-behavior: auto !important;
+                overscroll-behavior: none;
+            }
+            
+            body {
+                font-size: 15px;
+                overscroll-behavior-y: none;
+                /* Prevent momentum scrolling issues on Android */
+                -webkit-overflow-scrolling: auto;
+            }
+
+            .slide-content {
+                grid-template-columns: 1fr !important;
+                padding: 30px 24px !important;
+                gap: 30px !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            .slide-content.reverse {
+                grid-template-columns: 1fr !important;
+                direction: ltr !important;
+            }
+            
+            /* 
+             * Mobile structure should be:
+             * 1. Section label + h1 + subtitle (from content-container)
+             * 2. Image (image-container) 
+             * 3. Features/body content (from content-container)
+             * 
+             * Strategy: Split content-container visually using absolute positioning
+             * or by making content-container itself a flex container that wraps around image
+             */
+            
+            .slide-content .content-container {
+                display: contents; /* This makes children direct flex items of slide-content */
+            }
+            
+            /* Title elements appear first */
+            .slide-content .section-label {
+                order: 1;
+            }
+            
+            .slide-content h1 {
+                order: 2;
+            }
+            
+            .slide-content > .content-container > .subtitle,
+            .slide-content .content-container > p.subtitle {
+                order: 3;
+            }
+            
+            /* Image appears after title/subtitle */
+            .slide-content .image-container {
+                order: 4;
+            }
+            
+            /* Features and other content appear last */
+            .slide-content .features {
+                order: 5;
+            }
+            
+            .slide-content .content-container > div:not(.section-label):not(.features),
+            .slide-content .content-container > p:not(.subtitle) {
+                order: 6;
+            }
+
+            h1 {
+                font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+                margin-bottom: 12px !important;
+            }
+
+            .subtitle {
+                font-size: 15px !important;
+            }
+
+            .section-label {
+                font-size: 11px !important;
+            }
+
+            .content-container {
+                max-width: 100% !important;
+            }
+
+            .image-container {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                max-width: 100% !important;
+            }
+
+            .image-container img {
+                max-width: 100% !important;
+            }
+
+            .features {
+                gap: 12px !important;
+            }
+
+            .feature-block {
+                padding: 16px !important;
+            }
+
+            .feature-icon {
+                width: 36px !important;
+                height: 36px !important;
+            }
+
+            .feature-title {
+                font-size: 15px !important;
+            }
+
+            .feature-list li {
+                font-size: 14px !important;
+            }
+
+            /* Product Suite - Stack columns on mobile */
+            .slide-content[style*="max-width: 1400px"] > .content-container > div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* CRITICAL FIX: Argyle/Finicity two-column layout - stack on mobile */
+            .slide-content .content-container > div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+                gap: 40px !important;
+            }
+            
+            /* CRITICAL FIX: Phone images in Argyle/Finicity - reduce height on mobile */
+            .slide-content img[alt="Argyle"],
+            .slide-content img[alt="Finicity"] {
+                height: auto !important;
+                max-height: 350px !important;
+                width: auto !important;
+                max-width: 180px !important;
+            }
+            
+            /* CRITICAL FIX: Presenter card on thank you slide - stack vertically on mobile */
+            .slide-content div[style*="display: flex"][style*="align-items: center"][style*="justify-content: center"] {
+                flex-direction: column !important;
+                text-align: center !important;
+                padding: 24px !important;
+            }
+            
+            /* CRITICAL FIX: Presenter headshot - smaller on mobile */
+            .slide-content img[alt="Rick Roque"] {
+                width: 90px !important;
+                height: 90px !important;
+            }
+            
+            /* CRITICAL FIX: Text alignment for presenter info on mobile */
+            .slide-content div[style*="text-align: left"] {
+                text-align: center !important;
+            }
+            
+            /* CRITICAL FIX: Center the contact icons on mobile */
+            .slide-content div[style*="display: flex"][style*="flex-direction: column"] div[style*="display: flex"][style*="align-items: center"] {
+                justify-content: center !important;
+            }
+
+            /* Total Expert - 2 columns instead of 3 */
+            div[style*="grid-template-columns: repeat(3, 1fr)"] {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            
+            /* Contact cards - stack on portrait tablets */
+            div[style*="display: grid"][style*="grid-template-columns: 1fr 1fr"][style*="max-width: 900px"] {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+                max-width: 500px !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            
+            /* Product icons stay 2-column on tablets */
+            .image-container > div[style*="grid-template-columns: repeat(2, 1fr)"] {
+                max-width: 400px !important;
+                margin: 0 auto !important;
+            }
+
+            /* Values section on slide 2 - 2 columns instead of 3 */
+            div[style*="grid-template-columns: repeat(3, 1fr)"][style*="max-width: 600px"] {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .logo {
+                width: 36px;
+                height: 36px;
+                top: 12px;
+                left: 12px;
+            }
+
+            .nav {
+                top: 12px;
+                right: 12px;
+            }
+
+            .nav button {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+        }
+
+        /* Mobile - Portrait (320px - 480px) */
+        @media screen and (max-width: 480px) {
+            /* Android scroll fix */
+            html {
+                scroll-behavior: auto !important;
+                overscroll-behavior: none;
+            }
+            
+            body {
+                font-size: 14px;
+                overscroll-behavior-y: none;
+                -webkit-overflow-scrolling: auto;
+            }
+
+            .slide-content {
+                padding: 20px 16px !important;
+                gap: 24px !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            
+            /* Use display:contents to make content-container children direct flex items */
+            .slide-content .content-container {
+                display: contents;
+            }
+            
+            /* Title elements appear first */
+            .slide-content .section-label {
+                order: 1;
+            }
+            
+            .slide-content h1 {
+                order: 2;
+            }
+            
+            .slide-content > .content-container > .subtitle,
+            .slide-content .content-container > p.subtitle {
+                order: 3;
+            }
+            
+            /* Image appears after title/subtitle */
+            .slide-content .image-container {
+                order: 4;
+            }
+            
+            /* Features and other content appear last */
+            .slide-content .features {
+                order: 5;
+            }
+            
+            .slide-content .content-container > div:not(.section-label):not(.features),
+            .slide-content .content-container > p:not(.subtitle) {
+                order: 6;
+            }
+
+            h1 {
+                font-size: clamp(1.5rem, 7vw, 2rem) !important;
+                margin-bottom: 10px !important;
+                line-height: 1.2 !important;
+            }
+
+            .subtitle {
+                font-size: 14px !important;
+                margin-bottom: 20px !important;
+            }
+
+            .section-label {
+                font-size: 10px !important;
+                margin-bottom: 8px !important;
+            }
+
+            .feature-block {
+                padding: 14px !important;
+            }
+            
+            /* CRITICAL FIX: Contact cards grid on Slide 1 and 5 - stack vertically on mobile */
+            div[style*="display: grid"][style*="grid-template-columns: 1fr 1fr"][style*="max-width: 900px"] {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+                max-width: 100% !important;
+            }
+            
+            /* CRITICAL FIX: Product icon grid on Slide 2 - maintain 2 columns but make responsive */
+            .image-container > div[style*="grid-template-columns: repeat(2, 1fr)"] {
+                gap: 16px !important;
+                max-width: 100% !important;
+            }
+            
+            .image-container > div[style*="grid-template-columns: repeat(2, 1fr)"] img {
+                border-radius: 8px !important;
+            }
+            
+            /* CRITICAL FIX: Argyle/Finicity two-column layout - stack on mobile */
+            .slide-content .content-container > div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+                gap: 32px !important;
+            }
+            
+            /* CRITICAL FIX: Phone images in Argyle/Finicity - smaller on mobile */
+            .slide-content img[alt="Argyle"],
+            .slide-content img[alt="Finicity"] {
+                height: auto !important;
+                max-height: 300px !important;
+                width: auto !important;
+                max-width: 150px !important;
+            }
+            
+            /* CRITICAL FIX: Presenter card - stack vertically */
+            .slide-content div[style*="display: flex"][style*="align-items: center"][style*="justify-content: center"] {
+                flex-direction: column !important;
+                text-align: center !important;
+                padding: 20px !important;
+            }
+            
+            /* CRITICAL FIX: All headshots - appropriate mobile size */
+            .slide-content img[style*="border-radius: 50%"] {
+                width: 100px !important;
+                height: 100px !important;
+            }
+            
+            /* CRITICAL FIX: Text alignment for presenter info */
+            .slide-content div[style*="text-align: left"] {
+                text-align: center !important;
+            }
+            
+            /* CRITICAL FIX: Center contact icons */
+            .slide-content div[style*="display: flex"][style*="flex-direction: column"] div[style*="display: flex"][style*="align-items: center"] {
+                justify-content: center !important;
+            }
+            
+            /* CRITICAL FIX: Gradient callout boxes - adjust padding */
+            div[style*="background: linear-gradient"][style*="padding: 24px"] {
+                padding: 16px 20px !important;
+                font-size: 16px !important;
+            }
+            
+            /* CRITICAL FIX: Bullet points on Slide 2 */
+            ul[style*="list-style: none"] li {
+                font-size: 16px !important;
+                margin-bottom: 10px !important;
+            }
+
+            .feature-icon {
+                width: 32px !important;
+                height: 32px !important;
+            }
+
+            .feature-title {
+                font-size: 14px !important;
+            }
+
+            .feature-list li {
+                font-size: 13px !important;
+                line-height: 1.5 !important;
+            }
+
+            /* Slide 2 values - Single column on small mobile */
+            div[style*="grid-template-columns: repeat(3, 1fr)"][style*="max-width: 600px"] {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+            }
+
+            /* Hide decorative gradient glows on mobile for performance */
+            .gradient-glow,
+            .gradient-glow-secondary {
+                display: none;
+            }
+
+            .logo {
+                width: 32px;
+                height: 32px;
+            }
+
+            .nav button {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            /* Product headings with icons */
+            h3[style*="display: flex"] svg {
+                width: 16px !important;
+                height: 16px !important;
+                margin-right: 6px !important;
+            }
+
+            h3[style*="display: flex"] {
+                font-size: 16px !important;
+            }
+
+            /* Two-column lists in Non-QM Solutions */
+            ul[style*="columns: 2"] {
+                columns: 1 !important;
+            }
+        }
+
+        /* Extra Small Mobile (max 360px) */
+        @media screen and (max-width: 360px) {
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            .slide-content {
+                padding: 16px 12px !important;
+            }
+
+            .feature-block {
+                padding: 12px !important;
+            }
+
+            .nav button {
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .slide-content {
+                padding: 20px !important;
+            }
+
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            .feature-block {
+                padding: 10px !important;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav, .logo, .progress-container {
+                display: none !important;
+            }
+
+            .slide {
+                page-break-after: always;
+                min-height: auto;
+                padding: 40px;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .gradient-glow, .gradient-glow-secondary {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+        }
+
+        /* Accessibility Improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: high) {
+            :root {
+                --text-primary: #000000;
+                --text-secondary: #000000;
+                --bg-card: #ffffff;
+                --border: #000000;
+            }
+        }
+
+        /* Dark Mode Support (if needed in future) */
+        @media (prefers-color-scheme: dark) {
+            /* Optional: Add dark mode styles here */
+        }
+
+        /* Fix for iOS Safari address bar */
+        @supports (-webkit-touch-callout: none) {
+            .slide {
+                min-height: -webkit-fill-available;
+            }
+        }
+
+        /* Prevent text selection on double-tap (mobile) */
+        .nav button, .slide-content {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Allow text selection for content */
+        p, li, h1, h2, h3 {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        /* GPU Acceleration for smooth animations */
+        .slide, .feature-block, .image-container img {
+            will-change: transform, opacity;
+        }
+
+        /* Remove will-change after animation completes for performance */
+        .slide.visible {
+            will-change: auto;
+        }
+
+        /* Smooth scrolling for Firefox */
+        @-moz-document url-prefix() {
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+
+        /* Fix for IE11 (if needed) */
+        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+            .slide-content {
+                display: block;
+            }
+        }
+    </style>
+    </style>
 </head>
 <body>
     <div class="progress-container">
@@ -22,13 +994,15 @@
     <img src="data:image/webp;base64,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" alt="Homespire Logo" class="logo" loading="lazy">
 
     <div class="nav">
-        <button onclick="previousSlide()" aria-label="Previous slide">↑</button>
-        <button onclick="nextSlide()" aria-label="Next slide">↓</button>
+        <button onclick="previousSlide()" aria-label="Previous slide">&#8593;</button>
+        <button onclick="nextSlide()" aria-label="Next slide">&#8595;</button>
     </div>
 
-    <div class="slide-counter"><span id="currentSlide">1</span></div>
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
+    </div>
 
-    <!-- SLIDE 1: Hero + Contact (personalized) -->
+    <!-- SLIDE 1: Cover -->
     <section class="slide visible" data-slide="1">
         <div class="gradient-glow"></div>
         <div class="gradient-glow-secondary"></div>
@@ -63,10 +1037,10 @@
         </div>
     </section>
 
-    <!-- SLIDES 2-4: Shared product content (edit shared/slides.js to update all pages) -->
+    <!-- SLIDES 2-4: Shared product content — edit shared/slides.js to update all pages -->
     <div id="shared-slides"></div>
 
-    <!-- SLIDE 5: Thank You + Contact (personalized) -->
+    <!-- SLIDE 5: Thank You -->
     <section class="slide" data-slide="5">
         <div class="gradient-glow"></div>
         <div class="gradient-glow-secondary"></div>
@@ -97,7 +1071,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 32px;">
-                    <a href="tel:5712889993" style="display: inline-block; background: linear-gradient(135deg, #e040fb 0%, #7c4dff 100%); color: white; font-size: 16px; font-weight: 600; padding: 14px 40px; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 16px rgba(107, 78, 155, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                    <a href="tel:5712889993" style="display: inline-block; background: linear-gradient(135deg, #e040fb 0%, #7c4dff 100%); color: white; font-size: 16px; font-weight: 600; padding: 14px 40px; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 16px rgba(107, 78, 155, 0.25);">
                         Let&rsquo;s Talk
                     </a>
                 </div>
@@ -117,6 +1091,137 @@
     </footer>
 
     <script src="../shared/slides.js"></script>
-    <script src="../shared/core.js"></script>
+    <script>
+        const totalSlides = slides.length;
+        let currentSlideIndex = 0;
+
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -20% 0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    currentSlideIndex = parseInt(entry.target.dataset.slide) - 1;
+                    updateSlideCounter();
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => observer.observe(slide));
+
+        function updateProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function updateSlideCounter() {
+            document.getElementById('currentSlide').textContent = currentSlideIndex + 1;
+        }
+
+        window.addEventListener('scroll', updateProgress);
+
+        function nextSlide() {
+            if (currentSlideIndex < totalSlides - 1) {
+                currentSlideIndex++;
+                slides[currentSlideIndex].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                slides[currentSlideIndex].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Disable swipe navigation on mobile to prevent jumping
+        // Users can scroll naturally instead
+        // Touch/Swipe Support for Mobile - DISABLED to prevent Android scroll jumping
+        /*
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const minSwipeDistance = 50;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeDistance = touchStartY - touchEndY;
+            
+            if (Math.abs(swipeDistance) > minSwipeDistance) {
+                if (swipeDistance > 0) {
+                    // Swipe up - next slide
+                    nextSlide();
+                } else {
+                    // Swipe down - previous slide
+                    previousSlide();
+                }
+            }
+        }
+        */
+
+        // Debounced resize handler for better performance
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                updateProgress();
+            }, 250);
+        }, { passive: true });
+
+        // Prevent double-tap zoom on mobile
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Initial setup
+        slides[0].classList.add('visible');
+        updateProgress();
+
+        // Preload images for better performance
+        window.addEventListener('load', () => {
+            const images = document.querySelectorAll('img[src]');
+            images.forEach(img => {
+                if (!img.complete) {
+                    img.loading = 'lazy';
+                }
+            });
+        });
+
+        // Add loading='lazy' to all images for better performance
+        document.querySelectorAll('img').forEach(img => {
+            if (!img.hasAttribute('loading')) {
+                img.setAttribute('loading', 'lazy');
+            }
+        });
+    </script>
 </body>
 </html>
