@@ -129,5 +129,3 @@ const totalSlides = slides.length;
                 img.setAttribute('loading', 'lazy');
             }
         });
-    </script>
-
